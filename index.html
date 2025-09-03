@@ -7,153 +7,231 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="logo">
-                <h2>cautio <span class="beta">BETA</span></h2>
+    <!-- Login Page -->
+    <div class="login-page" id="loginPage">
+        <div class="login-container">
+            <div class="login-left">
+                <div class="login-logo">
+                    <div class="logo-circle">
+                        <div class="shield-icon"></div>
+                    </div>
+                </div>
             </div>
-            <div class="menu-label">MENU</div>
-            <nav class="nav-menu">
-                <div class="nav-item active" id="fleetNav">
-                    <i class="icon">🚛</i>
-                    <span>Fleet</span>
+            <div class="login-right">
+                <div class="login-form-container">
+                    <div class="login-header">
+                        <div class="login-logo-small">
+                            <div class="logo-small-circle">
+                                <div class="shield-small"></div>
+                            </div>
+                        </div>
+                        <h2>Sign in</h2>
+                    </div>
+                    <form class="login-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="example@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="password-input">
+                                <input type="password" id="password" placeholder="Password" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+                            </div>
+                        </div>
+                        <div class="forgot-password">
+                            <a href="#">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="login-btn">Login</button>
+                    </form>
                 </div>
-                <div class="nav-item">
-                    <i class="icon">👥</i>
-                    <span>Vehicle Group</span>
-                </div>
-                <div class="nav-item">
-                    <i class="icon">👤</i>
-                    <span>User Access</span>
-                </div>
-                <div class="nav-item">
-                    <i class="icon">📍</i>
-                    <span>Live</span>
-                </div>
-                <div class="nav-item">
-                    <i class="icon">📋</i>
-                    <span>Event Logs</span>
-                </div>
-                <div class="nav-item">
-                    <i class="icon">🚗</i>
-                    <span>Drivers</span>
-                </div>
-                <div class="nav-item">
-                    <i class="icon">▶️</i>
-                    <span>Drive Replay</span>
-                </div>
-                <div class="nav-item">
-                    <i class="icon">📊</i>
-                    <span>Reports</span>
-                </div>
-            </nav>
+            </div>
         </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Header -->
-            <div class="header">
-                <div class="header-left">
-                    <h1 id="pageTitle">COMMAND CENTER</h1>
-                    <p id="pageSubtitle">Welcome to a world where vehicles speak - and you listen in.</p>
+    <!-- Loading Page -->
+    <div class="loading-page" id="loadingPage" style="display: none;">
+        <div class="loading-content">
+            <div class="cautio-logo">
+                <h1>cautio</h1>
+            </div>
+            <div class="loading-spinner-main"></div>
+            <p class="loading-text">Loading your dashboard...</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="main-app" id="mainApp" style="display: none;">
+        <div class="container">
+            <!-- Collapsed Sidebar -->
+            <div class="sidebar-collapsed" id="sidebarCollapsed">
+                <div class="logo-collapsed">
+                    <h3>cautio</h3>
                 </div>
-                <div class="header-right">
-                    <div class="search-container">
-                        <input type="text" placeholder="Search for a vehicle" class="search-input">
-                        <button class="search-btn">🔍</button>
+                <div class="nav-icons">
+                    <div class="nav-icon-item" data-tab="customer" onmouseover="showSidebarMenu(event, 'customer')">
+                        <i class="icon">👥</i>
                     </div>
-                    <select class="group-selector">
-                        <option>All Groups</option>
-                    </select>
-                    <button class="clear-btn">Clear</button>
+                    <div class="nav-icon-item" data-tab="finance" onmouseover="showSidebarMenu(event, 'finance')">
+                        <i class="icon">💰</i>
+                    </div>
+                    <div class="nav-icon-item" data-tab="ground" onmouseover="showSidebarMenu(event, 'ground')">
+                        <i class="icon">🚛</i>
+                    </div>
+                    <div class="nav-icon-item" data-tab="inventory" onmouseover="showSidebarMenu(event, 'inventory')">
+                        <i class="icon">📦</i>
+                    </div>
                 </div>
             </div>
 
-            <!-- Dashboard Content -->
-            <div class="dashboard" id="dashboard">
-                <!-- Loading Screen -->
-                <div class="loading" id="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Loading dashboard data...</p>
-                </div>
-
-                <!-- Main Dashboard -->
-                <div class="dashboard-content" id="mainDashboard" style="display: none;">
-                    <div class="card main-card" onclick="showLevel2()">
-                        <div class="card-header">
-                            <h3>Total Customers</h3>
-                            <div class="card-count" id="totalCustomersCount">0</div>
-                        </div>
-                        <div class="card-body">
-                            <p>Click to view customer breakdown</p>
-                        </div>
+            <!-- Expanded Sidebar Menu -->
+            <div class="sidebar-menu" id="sidebarMenu" onmouseleave="hideSidebarMenu()">
+                <div class="sidebar-menu-content">
+                    <div class="menu-header">
+                        <h3>cautio</h3>
+                        <div class="menu-label">MENU</div>
+                    </div>
+                    <div class="menu-items" id="menuItems">
+                        <!-- Dynamic menu items will be inserted here -->
                     </div>
                 </div>
+            </div>
 
-                <!-- Level 2 Dashboard -->
-                <div class="dashboard-content" id="level2Dashboard" style="display: none;">
-                    <div class="nav-breadcrumb">
-                        <span onclick="showMainDashboard()" class="breadcrumb-link">Dashboard</span> 
-                        <span class="breadcrumb-separator">></span> 
-                        <span>Customer Overview</span>
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Header -->
+                <div class="header">
+                    <div class="header-left">
+                        <h1 id="pageTitle">COMMAND CENTER</h1>
+                        <p id="pageSubtitle">Welcome to a world where vehicles speak - and you listen in.</p>
                     </div>
-                    
-                    <div class="cards-grid">
-                        <div class="card" onclick="showPOCTable()">
-                            <div class="card-header">
-                                <h3>POC</h3>
-                                <div class="card-count" id="pocCount">0</div>
-                            </div>
-                            <div class="card-body">
-                                <p>Proof of Concept customers</p>
-                            </div>
+                    <div class="header-right">
+                        <div class="search-container">
+                            <input type="text" placeholder="Search for a vehicle" class="search-input">
+                            <button class="search-btn">🔍</button>
                         </div>
-
-                        <div class="card" onclick="showOnboardedTable()">
-                            <div class="card-header">
-                                <h3>Onboarded</h3>
-                                <div class="card-count" id="onboardedCount">0</div>
-                            </div>
-                            <div class="card-body">
-                                <p>Successfully onboarded customers</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="closed-section" id="closedSection" style="display: none;">
-                        <div class="card closed-card" onclick="showClosedPOCTable()">
-                            <div class="card-header">
-                                <h3>Closed POCs</h3>
-                                <div class="card-count" id="closedPOCCount">0</div>
-                            </div>
-                            <div class="card-body">
-                                <p>POCs that have ended</p>
-                            </div>
+                        <select class="group-selector">
+                            <option>All Groups</option>
+                        </select>
+                        <button class="clear-btn">Clear</button>
+                        <div class="user-profile" onclick="logout()">
+                            <div class="user-avatar">👤</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Table View -->
-                <div class="dashboard-content" id="tableView" style="display: none;">
-                    <div class="nav-breadcrumb" id="tableBreadcrumb">
-                        <!-- Dynamic breadcrumb will be inserted here -->
+                <!-- Dashboard Content -->
+                <div class="dashboard" id="dashboard">
+                    <!-- Data Loading -->
+                    <div class="data-loading" id="dataLoading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading data from Google Sheets...</p>
                     </div>
-                    
-                    <div class="table-container">
-                        <div class="table-header">
-                            <h3 id="tableTitle">Customer Data</h3>
-                            <div class="table-count">Total: <span id="tableCount">0</span></div>
+
+                    <!-- Customer Overview Section -->
+                    <div class="dashboard-content" id="customerOverview" style="display: none;">
+                        <!-- Main Dashboard -->
+                        <div class="dashboard-view" id="mainDashboard">
+                            <div class="card main-card" onclick="showLevel2()">
+                                <div class="card-header">
+                                    <h3>Total Customers</h3>
+                                    <div class="card-count" id="totalCustomersCount">0</div>
+                                </div>
+                                <div class="card-body">
+                                    <p>Click to view customer breakdown</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="table-wrapper">
-                            <table class="data-table" id="dataTable">
-                                <thead id="tableHead">
-                                    <!-- Dynamic headers will be inserted here -->
-                                </thead>
-                                <tbody id="tableBody">
-                                    <!-- Dynamic data will be inserted here -->
-                                </tbody>
-                            </table>
+
+                        <!-- Level 2 Dashboard -->
+                        <div class="dashboard-view" id="level2Dashboard" style="display: none;">
+                            <div class="nav-breadcrumb">
+                                <span onclick="showMainDashboard()" class="breadcrumb-link">Dashboard</span> 
+                                <span class="breadcrumb-separator">></span> 
+                                <span>Customer Overview</span>
+                            </div>
+                            
+                            <div class="cards-grid">
+                                <div class="card" onclick="showPOCTable()">
+                                    <div class="card-header">
+                                        <h3>POC</h3>
+                                        <div class="card-count" id="pocCount">0</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Proof of Concept customers</p>
+                                    </div>
+                                </div>
+
+                                <div class="card" onclick="showOnboardedTable()">
+                                    <div class="card-header">
+                                        <h3>Onboarded</h3>
+                                        <div class="card-count" id="onboardedCount">0</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Successfully onboarded customers</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="closed-section" id="closedSection" style="display: none;">
+                                <div class="card closed-card" onclick="showClosedPOCTable()">
+                                    <div class="card-header">
+                                        <h3>Closed POCs</h3>
+                                        <div class="card-count" id="closedPOCCount">0</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>POCs that have ended</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Table View -->
+                        <div class="dashboard-view" id="tableView" style="display: none;">
+                            <div class="nav-breadcrumb" id="tableBreadcrumb">
+                                <!-- Dynamic breadcrumb will be inserted here -->
+                            </div>
+                            
+                            <div class="table-container">
+                                <div class="table-header">
+                                    <h3 id="tableTitle">Customer Data</h3>
+                                    <div class="table-count">Total: <span id="tableCount">0</span></div>
+                                </div>
+                                <div class="table-wrapper">
+                                    <table class="data-table" id="dataTable">
+                                        <thead id="tableHead">
+                                            <!-- Dynamic headers will be inserted here -->
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            <!-- Dynamic data will be inserted here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Finance Section -->
+                    <div class="dashboard-content" id="financeSection" style="display: none;">
+                        <div class="coming-soon">
+                            <h2>Finance</h2>
+                            <p>Financial data and analytics coming soon...</p>
+                        </div>
+                    </div>
+
+                    <!-- Ground Operations Section -->
+                    <div class="dashboard-content" id="groundSection" style="display: none;">
+                        <div class="coming-soon">
+                            <h2>Ground Operations</h2>
+                            <p>Ground operations dashboard coming soon...</p>
+                        </div>
+                    </div>
+
+                    <!-- Inventory Management Section -->
+                    <div class="dashboard-content" id="inventorySection" style="display: none;">
+                        <div class="coming-soon">
+                            <h2>Inventory Management</h2>
+                            <p>Inventory management system coming soon...</p>
                         </div>
                     </div>
                 </div>
