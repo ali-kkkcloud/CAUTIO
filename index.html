@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cautio Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <h2>cautio <span class="beta">BETA</span></h2>
+            </div>
+            <div class="menu-label">MENU</div>
+            <nav class="nav-menu">
+                <div class="nav-item active" id="fleetNav">
+                    <i class="icon">🚛</i>
+                    <span>Fleet</span>
+                </div>
+                <div class="nav-item">
+                    <i class="icon">👥</i>
+                    <span>Vehicle Group</span>
+                </div>
+                <div class="nav-item">
+                    <i class="icon">👤</i>
+                    <span>User Access</span>
+                </div>
+                <div class="nav-item">
+                    <i class="icon">📍</i>
+                    <span>Live</span>
+                </div>
+                <div class="nav-item">
+                    <i class="icon">📋</i>
+                    <span>Event Logs</span>
+                </div>
+                <div class="nav-item">
+                    <i class="icon">🚗</i>
+                    <span>Drivers</span>
+                </div>
+                <div class="nav-item">
+                    <i class="icon">▶️</i>
+                    <span>Drive Replay</span>
+                </div>
+                <div class="nav-item">
+                    <i class="icon">📊</i>
+                    <span>Reports</span>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <h1 id="pageTitle">COMMAND CENTER</h1>
+                    <p id="pageSubtitle">Welcome to a world where vehicles speak - and you listen in.</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-container">
+                        <input type="text" placeholder="Search for a vehicle" class="search-input">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                    <select class="group-selector">
+                        <option>All Groups</option>
+                    </select>
+                    <button class="clear-btn">Clear</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard" id="dashboard">
+                <!-- Loading Screen -->
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading dashboard data...</p>
+                </div>
+
+                <!-- Main Dashboard -->
+                <div class="dashboard-content" id="mainDashboard" style="display: none;">
+                    <div class="card main-card" onclick="showLevel2()">
+                        <div class="card-header">
+                            <h3>Total Customers</h3>
+                            <div class="card-count" id="totalCustomersCount">0</div>
+                        </div>
+                        <div class="card-body">
+                            <p>Click to view customer breakdown</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level 2 Dashboard -->
+                <div class="dashboard-content" id="level2Dashboard" style="display: none;">
+                    <div class="nav-breadcrumb">
+                        <span onclick="showMainDashboard()" class="breadcrumb-link">Dashboard</span> 
+                        <span class="breadcrumb-separator">></span> 
+                        <span>Customer Overview</span>
+                    </div>
+                    
+                    <div class="cards-grid">
+                        <div class="card" onclick="showPOCTable()">
+                            <div class="card-header">
+                                <h3>POC</h3>
+                                <div class="card-count" id="pocCount">0</div>
+                            </div>
+                            <div class="card-body">
+                                <p>Proof of Concept customers</p>
+                            </div>
+                        </div>
+
+                        <div class="card" onclick="showOnboardedTable()">
+                            <div class="card-header">
+                                <h3>Onboarded</h3>
+                                <div class="card-count" id="onboardedCount">0</div>
+                            </div>
+                            <div class="card-body">
+                                <p>Successfully onboarded customers</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="closed-section" id="closedSection" style="display: none;">
+                        <div class="card closed-card" onclick="showClosedPOCTable()">
+                            <div class="card-header">
+                                <h3>Closed POCs</h3>
+                                <div class="card-count" id="closedPOCCount">0</div>
+                            </div>
+                            <div class="card-body">
+                                <p>POCs that have ended</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div class="dashboard-content" id="tableView" style="display: none;">
+                    <div class="nav-breadcrumb" id="tableBreadcrumb">
+                        <!-- Dynamic breadcrumb will be inserted here -->
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 id="tableTitle">Customer Data</h3>
+                            <div class="table-count">Total: <span id="tableCount">0</span></div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="dataTable">
+                                <thead id="tableHead">
+                                    <!-- Dynamic headers will be inserted here -->
+                                </thead>
+                                <tbody id="tableBody">
+                                    <!-- Dynamic data will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
