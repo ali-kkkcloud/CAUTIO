@@ -16,59 +16,60 @@ let closedPOCData = [];
 let currentView = 'main';
 let currentTab = 'customer';
 
-// Menu configurations
-const menuConfigs = {
-    customer: {
-        title: 'Customer Overview',
-        items: [
-            { name: 'Dashboard', action: 'showCustomerDashboard' },
-            { name: 'POC Management', action: 'showPOCTable' },
-            { name: 'Onboarded Customers', action: 'showOnboardedTable' },
-            { name: 'Closed POCs', action: 'showClosedPOCTable' }
-        ]
-    },
-    finance: {
-        title: 'Finance',
-        items: [
-            { name: 'Revenue Dashboard', action: 'showFinanceSection' },
-            { name: 'Billing', action: 'showFinanceSection' },
-            { name: 'Invoices', action: 'showFinanceSection' },
-            { name: 'Reports', action: 'showFinanceSection' }
-        ]
-    },
-    ground: {
-        title: 'Ground Operations',
-        items: [
-            { name: 'Fleet Management', action: 'showGroundSection' },
-            { name: 'Driver Management', action: 'showGroundSection' },
-            { name: 'Route Planning', action: 'showGroundSection' },
-            { name: 'Operations Monitor', action: 'showGroundSection' }
-        ]
-    },
-    inventory: {
-        title: 'Inventory Management',
-        items: [
-            { name: 'Stock Overview', action: 'showInventorySection' },
-            { name: 'Warehouse Management', action: 'showInventorySection' },
-            { name: 'Supply Chain', action: 'showInventorySection' },
-            { name: 'Procurement', action: 'showInventorySection' }
-        ]
-    }
-};
+// Loading messages
+const loadingMessages = [
+    'Loading your data',
+    'Connecting to Google Sheets',
+    'Processing customer information',
+    'Analyzing POC data',
+    'Finalizing dashboard',
+    'Almost ready!'
+];
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is already logged in
     if (localStorage.getItem('cautio_logged_in') === 'true') {
         showLoadingPage();
-        setTimeout(() => {
+        simulateLoading(() => {
             showMainApp();
             loadData();
-        }, 2000);
+        });
     } else {
         showLoginPage();
     }
+    
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', handleKeyboardShortcuts);
 });
+
+// Keyboard shortcuts
+function handleKeyboardShortcuts(event) {
+    if (event.ctrlKey || event.metaKey) {
+        switch(event.key) {
+            case '1':
+                event.preventDefault();
+                switchTab('customer');
+                break;
+            case '2':
+                event.preventDefault();
+                switchTab('finance');
+                break;
+            case '3':
+                event.preventDefault();
+                switchTab('ground');
+                break;
+            case '4':
+                event.preventDefault();
+                switchTab('inventory');
+                break;
+            case 'r':
+                event.preventDefault();
+                loadData();
+                break;
+        }
+    }
+}
 
 // Login functionality
 function handleLogin(event) {
@@ -79,26 +80,70 @@ function handleLogin(event) {
     
     if (email === validCredentials.email && password === validCredentials.password) {
         localStorage.setItem('cautio_logged_in', 'true');
-        showLoadingPage();
+        
+        // Add success animation
+        const loginBtn = event.target.querySelector('.login-btn');
+        loginBtn.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+        loginBtn.innerHTML = '<i class="fas fa-check"></i> <span>Login Successful!</span>';
         
         setTimeout(() => {
-            showMainApp();
-            loadData();
-        }, 3000);
+            showLoadingPage();
+            simulateLoading(() => {
+                showMainApp();
+                loadData();
+            });
+        }, 1000);
     } else {
-        alert('Invalid credentials! Please use admin@gm.com / admin123');
+        // Show error animation
+        const loginForm = document.querySelector('.login-form');
+        loginForm.style.animation = 'shake 0.5s ease-in-out';
+        
+        const loginBtn = event.target.querySelector('.login-btn');
+        loginBtn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+        loginBtn.innerHTML = '<i class="fas fa-times"></i> <span>Invalid Credentials</span>';
+        
+        setTimeout(() => {
+            loginBtn.style.background = 'linear-gradient(135deg, #007bff 0%, #00d4aa 100%)';
+            loginBtn.innerHTML = '<span>Sign In</span> <i class="fas fa-arrow-right"></i>';
+            loginForm.style.animation = '';
+        }, 2000);
     }
 }
 
+// Add shake animation to CSS dynamically
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+`;
+document.head.appendChild(style);
+
 function togglePassword() {
     const passwordInput = document.getElementById('password');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
+    const toggleBtn = document.querySelector('.password-toggle i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleBtn.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        toggleBtn.className = 'fas fa-eye';
+    }
 }
 
 function logout() {
-    localStorage.removeItem('cautio_logged_in');
-    location.reload();
+    // Add logout animation
+    const userProfile = document.querySelector('.user-profile');
+    userProfile.style.transform = 'scale(0.8)';
+    userProfile.style.opacity = '0.5';
+    
+    setTimeout(() => {
+        localStorage.removeItem('cautio_logged_in');
+        location.reload();
+    }, 300);
 }
 
 // Page navigation
@@ -118,44 +163,114 @@ function showMainApp() {
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('loadingPage').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
+    
+    // Initialize with customer tab
+    switchTab('customer');
 }
 
-// Sidebar functionality
-let hoverTimeout;
-
-function showSidebarMenu(event, tabType) {
-    clearTimeout(hoverTimeout);
-    currentTab = tabType;
+// Simulate loading with progress bar and changing messages
+function simulateLoading(callback) {
+    const progressBar = document.getElementById('progressBar');
+    const loadingSubText = document.getElementById('loadingSubText');
+    let progress = 0;
+    let messageIndex = 0;
     
-    const sidebarMenu = document.getElementById('sidebarMenu');
-    const menuItems = document.getElementById('menuItems');
-    const config = menuConfigs[tabType];
-    
-    // Update menu content
-    menuItems.innerHTML = config.items.map(item => 
-        `<div class="menu-item" onclick="${item.action}()">${item.name}</div>`
-    ).join('');
-    
-    // Show menu
-    sidebarMenu.classList.add('show');
-    
-    // Update active icon
-    document.querySelectorAll('.nav-icon-item').forEach(icon => {
-        icon.classList.remove('active');
-    });
-    event.currentTarget.classList.add('active');
-}
-
-function hideSidebarMenu() {
-    hoverTimeout = setTimeout(() => {
-        document.getElementById('sidebarMenu').classList.remove('show');
+    const loadingInterval = setInterval(() => {
+        progress += Math.random() * 15 + 5;
+        
+        if (progress >= 100) {
+            progress = 100;
+            progressBar.style.width = '100%';
+            loadingSubText.textContent = 'Ready!';
+            clearInterval(loadingInterval);
+            
+            setTimeout(() => {
+                callback();
+            }, 500);
+        } else {
+            progressBar.style.width = progress + '%';
+            
+            // Change message every 20% progress
+            if (progress > (messageIndex + 1) * 20 && messageIndex < loadingMessages.length - 1) {
+                messageIndex++;
+                loadingSubText.textContent = loadingMessages[messageIndex];
+            }
+        }
     }, 300);
+}
+
+// Tab switching functionality
+function switchTab(tabName) {
+    currentTab = tabName;
+    
+    // Update active tab
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    
+    // Hide all sections
+    hideAllSections();
+    
+    // Show appropriate section and update header
+    switch(tabName) {
+        case 'customer':
+            document.getElementById('customerSection').style.display = 'block';
+            updateHeader('CUSTOMER OVERVIEW', 'Comprehensive view of your customer management');
+            showMainDashboard();
+            break;
+        case 'finance':
+            document.getElementById('financeSection').style.display = 'block';
+            updateHeader('FINANCE MANAGEMENT', 'Revenue analytics and billing dashboard');
+            break;
+        case 'ground':
+            document.getElementById('groundSection').style.display = 'block';
+            updateHeader('GROUND OPERATIONS', 'Fleet management and operations control');
+            break;
+        case 'inventory':
+            document.getElementById('inventorySection').style.display = 'block';
+            updateHeader('INVENTORY MANAGEMENT', 'Warehouse and stock control system');
+            break;
+    }
+    
+    // Add tab switching animation
+    const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+    activeTab.style.transform = 'translateX(12px)';
+    setTimeout(() => {
+        activeTab.style.transform = 'translateX(8px)';
+    }, 150);
+}
+
+function hideAllSections() {
+    document.getElementById('customerSection').style.display = 'none';
+    document.getElementById('financeSection').style.display = 'none';
+    document.getElementById('groundSection').style.display = 'none';
+    document.getElementById('inventorySection').style.display = 'none';
+}
+
+function updateHeader(title, subtitle) {
+    document.getElementById('pageTitle').textContent = title;
+    document.getElementById('pageSubtitle').textContent = subtitle;
+    
+    // Add header update animation
+    const headerLeft = document.querySelector('.header-left');
+    headerLeft.style.opacity = '0.7';
+    setTimeout(() => {
+        headerLeft.style.opacity = '1';
+    }, 200);
 }
 
 // Load data from Google Sheets
 async function loadData() {
     try {
         showDataLoading(true);
+        
+        // Add refresh animation to button
+        const refreshBtn = document.querySelector('.action-btn[title="Refresh Data"]');
+        if (refreshBtn) {
+            const icon = refreshBtn.querySelector('i');
+            icon.style.animation = 'spin 1s linear infinite';
+        }
         
         // First, try direct fetch
         let response;
@@ -198,14 +313,26 @@ async function loadData() {
         // Process data
         processData();
         
-        // Show customer dashboard by default
-        showCustomerDashboard();
+        // Show success message
+        showNotification('Data loaded successfully!', 'success');
+        
+        // Update dashboard
+        if (currentTab === 'customer') {
+            showMainDashboard();
+        }
+        
         showDataLoading(false);
+        
+        // Stop refresh animation
+        if (refreshBtn) {
+            const icon = refreshBtn.querySelector('i');
+            icon.style.animation = '';
+        }
         
     } catch (error) {
         console.error('Error loading data:', error);
         
-        // Fallback: try alternative URL format
+        // Try alternative URL format
         try {
             console.log('Trying alternative CSV URL...');
             const alternativeUrl = `https://docs.google.com/spreadsheets/d/${sourceSheetId}/export?format=csv`;
@@ -214,18 +341,85 @@ async function loadData() {
             
             allData = parseCSV(altCsvText);
             processData();
-            showCustomerDashboard();
+            
+            if (currentTab === 'customer') {
+                showMainDashboard();
+            }
+            
+            showNotification('Data loaded successfully!', 'success');
             showDataLoading(false);
             
         } catch (altError) {
             console.error('Alternative URL also failed:', altError);
-            showError('Failed to load data from Google Sheets. Please check:\n1. Sheet is publicly accessible\n2. Internet connection\n3. Sheet ID is correct');
+            showError('Failed to load data from Google Sheets. Please check:\n• Sheet is publicly accessible\n• Internet connection is stable\n• Sheet ID is correct');
             showDataLoading(false);
+            showNotification('Failed to load data', 'error');
+        }
+        
+        // Stop refresh animation
+        const refreshBtn = document.querySelector('.action-btn[title="Refresh Data"]');
+        if (refreshBtn) {
+            const icon = refreshBtn.querySelector('i');
+            icon.style.animation = '';
         }
     }
 }
 
-// Parse CSV data
+// Show notification
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add notification styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 20px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 500;
+        z-index: 9999;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    `;
+    
+    if (type === 'success') {
+        notification.style.background = 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)';
+    } else if (type === 'error') {
+        notification.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+    } else {
+        notification.style.background = 'linear-gradient(135deg, #007bff 0%, #00d4aa 100%)';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Remove after 4 seconds
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 4000);
+}
+
+// Parse CSV data (same as before but with better error handling)
 function parseCSV(csvText) {
     const lines = csvText.trim().split('\n');
     if (lines.length < 2) return [];
@@ -371,59 +565,43 @@ function formatDate(dateString) {
 
 // Show/hide data loading
 function showDataLoading(show) {
-    document.getElementById('dataLoading').style.display = show ? 'flex' : 'none';
+    const loadingElement = document.getElementById('dataLoading');
+    if (show) {
+        loadingElement.style.display = 'flex';
+        // Add loading animation to the card
+        loadingElement.style.opacity = '0';
+        loadingElement.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            loadingElement.style.opacity = '1';
+            loadingElement.style.transform = 'translateY(0)';
+        }, 100);
+    } else {
+        loadingElement.style.opacity = '0';
+        loadingElement.style.transform = 'translateY(-20px)';
+        setTimeout(() => {
+            loadingElement.style.display = 'none';
+        }, 300);
+    }
 }
 
 // Show error message
 function showError(message) {
-    const dashboard = document.getElementById('dashboard');
+    const dashboard = document.querySelector('.dashboard-wrapper');
     dashboard.innerHTML = `
-        <div class="empty-state">
-            <h3>Error Loading Data</h3>
-            <p style="white-space: pre-line;">${message}</p>
-            <button onclick="loadData()" class="clear-btn" style="margin-top: 16px; padding: 12px 24px;">
-                Retry Loading Data
-            </button>
+        <div class="section-content">
+            <div class="coming-soon-section">
+                <div class="coming-soon-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 style="color: #ef4444;">Error Loading Data</h2>
+                <p style="white-space: pre-line;">${message}</p>
+                <button onclick="loadData()" class="action-btn" style="margin-top: 24px; padding: 12px 24px; background: linear-gradient(135deg, #007bff 0%, #00d4aa 100%); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600;">
+                    <i class="fas fa-sync-alt" style="margin-right: 8px;"></i>
+                    Retry Loading Data
+                </button>
+            </div>
         </div>
     `;
-}
-
-// Section navigation functions
-function showCustomerDashboard() {
-    hideAllSections();
-    document.getElementById('customerOverview').style.display = 'block';
-    showMainDashboard();
-    updateHeader('CUSTOMER OVERVIEW', 'Welcome to your customer management dashboard.');
-}
-
-function showFinanceSection() {
-    hideAllSections();
-    document.getElementById('financeSection').style.display = 'block';
-    updateHeader('FINANCE', 'Financial data and analytics dashboard.');
-}
-
-function showGroundSection() {
-    hideAllSections();
-    document.getElementById('groundSection').style.display = 'block';
-    updateHeader('GROUND OPERATIONS', 'Fleet and operations management dashboard.');
-}
-
-function showInventorySection() {
-    hideAllSections();
-    document.getElementById('inventorySection').style.display = 'block';
-    updateHeader('INVENTORY MANAGEMENT', 'Warehouse and inventory control dashboard.');
-}
-
-function hideAllSections() {
-    document.getElementById('customerOverview').style.display = 'none';
-    document.getElementById('financeSection').style.display = 'none';
-    document.getElementById('groundSection').style.display = 'none';
-    document.getElementById('inventorySection').style.display = 'none';
-}
-
-function updateHeader(title, subtitle) {
-    document.getElementById('pageTitle').textContent = title;
-    document.getElementById('pageSubtitle').textContent = subtitle;
 }
 
 // Customer dashboard navigation
@@ -432,9 +610,9 @@ function showMainDashboard() {
     hideAllViews();
     document.getElementById('mainDashboard').style.display = 'block';
     
-    // Update total customers count
-    const totalCustomers = allData.length;
-    document.getElementById('totalCustomersCount').textContent = totalCustomers;
+    // Update total customers count with animation
+    const countElement = document.getElementById('totalCustomersCount');
+    animateNumber(countElement, 0, allData.length, 1500);
 }
 
 function showLevel2() {
@@ -442,18 +620,44 @@ function showLevel2() {
     hideAllViews();
     document.getElementById('level2Dashboard').style.display = 'block';
     
-    // Update counts
-    document.getElementById('pocCount').textContent = pocData.length;
-    document.getElementById('onboardedCount').textContent = onboardedData.length;
-    document.getElementById('closedPOCCount').textContent = closedPOCData.length;
+    // Update counts with animations
+    animateNumber(document.getElementById('pocCount'), 0, pocData.length, 1000);
+    animateNumber(document.getElementById('onboardedCount'), 0, onboardedData.length, 1200);
+    animateNumber(document.getElementById('closedPOCCount'), 0, closedPOCData.length, 800);
     
     // Show closed section if there are closed POCs
-    const closedSection = document.getElementById('closedSection');
+    const closedCardWrapper = document.getElementById('closedCardWrapper');
     if (closedPOCData.length > 0) {
-        closedSection.style.display = 'block';
+        closedCardWrapper.style.display = 'block';
+        // Add entrance animation
+        closedCardWrapper.style.opacity = '0';
+        closedCardWrapper.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            closedCardWrapper.style.opacity = '1';
+            closedCardWrapper.style.transform = 'translateY(0)';
+        }, 300);
     } else {
-        closedSection.style.display = 'none';
+        closedCardWrapper.style.display = 'none';
     }
+}
+
+// Animate number counting
+function animateNumber(element, start, end, duration) {
+    if (!element) return;
+    
+    const range = end - start;
+    const increment = range / (duration / 50);
+    let current = start;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= end) {
+            element.textContent = end;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, 50);
 }
 
 function showPOCTable() {
@@ -479,16 +683,18 @@ function showTable(data, title, columns, type) {
     // Update breadcrumb
     const breadcrumb = document.getElementById('tableBreadcrumb');
     breadcrumb.innerHTML = `
-        <span onclick="showMainDashboard()" class="breadcrumb-link">Dashboard</span>
-        <span class="breadcrumb-separator">></span>
-        <span onclick="showLevel2()" class="breadcrumb-link">Customer Overview</span>
-        <span class="breadcrumb-separator">></span>
+        <span onclick="showMainDashboard()" class="breadcrumb-link">
+            <i class="fas fa-home"></i> Dashboard
+        </span>
+        <i class="fas fa-chevron-right breadcrumb-separator"></i>
+        <span onclick="showLevel2()" class="breadcrumb-link">Customer Breakdown</span>
+        <i class="fas fa-chevron-right breadcrumb-separator"></i>
         <span>${title}</span>
     `;
     
     // Update table title and count
     document.getElementById('tableTitle').textContent = title;
-    document.getElementById('tableCount').textContent = data.length;
+    animateNumber(document.getElementById('tableCount'), 0, data.length, 800);
     
     // Generate table headers
     const tableHead = document.getElementById('tableHead');
@@ -501,7 +707,8 @@ function showTable(data, title, columns, type) {
     if (data.length === 0) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="${columns.length}" style="text-align: center; padding: 40px; color: #888;">
+                <td colspan="${columns.length}" style="text-align: center; padding: 60px; color: #94a3b8;">
+                    <i class="fas fa-inbox" style="font-size: 2rem; margin-bottom: 16px; opacity: 0.5;"></i><br>
                     No data available for ${title.toLowerCase()}
                 </td>
             </tr>
@@ -528,16 +735,84 @@ function showTable(data, title, columns, type) {
             return `<td class="${cellClass}">${value}</td>`;
         }).join('');
         
-        return `<tr>${cells}</tr>`;
+        return `<tr style="animation: fadeInUp 0.3s ease ${index * 0.05}s both">${cells}</tr>`;
     }).join('');
     
     tableBody.innerHTML = rows;
+    
+    // Add fadeInUp animation
+    const fadeInUpStyle = `
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    `;
+    
+    if (!document.getElementById('fadeInUpStyle')) {
+        const style = document.createElement('style');
+        style.id = 'fadeInUpStyle';
+        style.textContent = fadeInUpStyle;
+        document.head.appendChild(style);
+    }
 }
 
 function hideAllViews() {
     document.getElementById('mainDashboard').style.display = 'none';
     document.getElementById('level2Dashboard').style.display = 'none';
     document.getElementById('tableView').style.display = 'none';
+}
+
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            if (query.length > 2) {
+                searchCustomers(query);
+            }
+        }, 300));
+    }
+});
+
+function searchCustomers(query) {
+    if (currentView !== 'table') return;
+    
+    const rows = document.querySelectorAll('#tableBody tr');
+    let visibleCount = 0;
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(query)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    // Update count
+    document.getElementById('tableCount').textContent = visibleCount;
+    
+    // Show message if no results
+    if (visibleCount === 0 && query.length > 0) {
+        const tbody = document.getElementById('tableBody');
+        const colspan = tbody.querySelector('tr').children.length;
+        tbody.innerHTML += `
+            <tr class="search-no-results">
+                <td colspan="${colspan}" style="text-align: center; padding: 40px; color: #94a3b8; font-style: italic;">
+                    <i class="fas fa-search" style="margin-right: 8px;"></i>
+                    No results found for "${query}"
+                </td>
+            </tr>
+        `;
+    }
 }
 
 // Utility functions
@@ -553,47 +828,7 @@ function debounce(func, wait) {
     };
 }
 
-// Search functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(function(e) {
-            console.log('Searching for:', e.target.value);
-            // Future search implementation
-        }, 300));
-    }
-});
-
-// Handle browser back/forward buttons
-window.addEventListener('popstate', function(event) {
-    if (event.state) {
-        switch (event.state.view) {
-            case 'main':
-                showMainDashboard();
-                break;
-            case 'level2':
-                showLevel2();
-                break;
-            default:
-                showMainDashboard();
-        }
-    }
-});
-
-// Add history states for better navigation
-function addHistoryState(view, title) {
-    history.pushState({ view: view }, title, `#${view}`);
-}
-
-// Check initial URL hash
-window.addEventListener('load', function() {
-    const hash = window.location.hash.replace('#', '');
-    if (hash === 'level2' && allData.length > 0) {
-        showLevel2();
-    }
-});
-
-// Debug function to check data
+// Debug function
 function debugData() {
     console.log('=== DEBUG DATA ===');
     console.log('Total rows:', allData.length);
@@ -604,5 +839,15 @@ function debugData() {
     console.log('Closed POC data:', closedPOCData.length);
 }
 
-// Make debugData available globally
+// Make functions available globally
 window.debugData = debugData;
+window.switchTab = switchTab;
+window.showMainDashboard = showMainDashboard;
+window.showLevel2 = showLevel2;
+window.showPOCTable = showPOCTable;
+window.showOnboardedTable = showOnboardedTable;
+window.showClosedPOCTable = showClosedPOCTable;
+window.loadData = loadData;
+window.handleLogin = handleLogin;
+window.togglePassword = togglePassword;
+window.logout = logout;
