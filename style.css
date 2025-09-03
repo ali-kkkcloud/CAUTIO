@@ -12,41 +12,333 @@ body {
     overflow-x: hidden;
 }
 
-.container {
+/* Login Page Styles */
+.login-page {
+    display: flex;
+    min-height: 100vh;
+    background: #0a0a0a;
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.login-left {
+    flex: 1;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-left::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 100px, rgba(255,255,255,0.01) 100px, rgba(255,255,255,0.01) 200px);
+}
+
+.login-logo {
+    z-index: 2;
+}
+
+.logo-circle {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 0 80px rgba(0, 0, 0, 0.5),
+        inset 0 0 80px rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.shield-icon {
+    width: 120px;
+    height: 140px;
+    background: linear-gradient(135deg, #2a2a2a 0%, #000000 100%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.login-right {
+    flex: 1;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.login-logo-small {
+    margin-bottom: 24px;
+}
+
+.logo-small-circle {
+    width: 80px;
+    height: 80px;
+    background: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 8px 30px rgba(0, 123, 255, 0.3);
+}
+
+.shield-small {
+    width: 30px;
+    height: 35px;
+    background: #ffffff;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.login-header h2 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    color: #cccccc;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 16px 20px;
+    background: #2a2a2a;
+    border: 1px solid #404040;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-group input::placeholder {
+    color: #888888;
+}
+
+.password-input {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #888888;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+}
+
+.forgot-password {
+    text-align: right;
+    margin-bottom: 32px;
+}
+
+.forgot-password a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.forgot-password a:hover {
+    color: #0056b3;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 30px rgba(0, 123, 255, 0.2);
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 123, 255, 0.3);
+}
+
+/* Loading Page Styles */
+.loading-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #0a0a0a;
+    flex-direction: column;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.cautio-logo h1 {
+    font-size: 4rem;
+    font-weight: 300;
+    color: #ffffff;
+    margin-bottom: 40px;
+    letter-spacing: 4px;
+}
+
+.loading-spinner-main {
+    width: 60px;
+    height: 60px;
+    border: 3px solid #333333;
+    border-top: 3px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 24px;
+}
+
+.loading-text {
+    color: #888888;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Main App Container */
+.main-app {
     display: flex;
     min-height: 100vh;
 }
 
-/* Sidebar Styles */
-.sidebar {
-    width: 280px;
+.container {
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+
+/* Collapsed Sidebar */
+.sidebar-collapsed {
+    width: 80px;
     background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
-    padding: 24px 20px;
+    padding: 24px 16px;
     border-right: 1px solid #333;
     position: fixed;
     height: 100vh;
-    overflow-y: auto;
+    overflow: hidden;
+    z-index: 1000;
     transition: all 0.3s ease;
 }
 
-.logo {
+.logo-collapsed h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
     margin-bottom: 40px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
 }
 
-.logo h2 {
+.nav-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-icon-item {
+    width: 48px;
+    height: 48px;
+    background: #333333;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 20px;
+}
+
+.nav-icon-item:hover {
+    background: #007bff;
+    transform: scale(1.1);
+}
+
+/* Expanded Sidebar Menu */
+.sidebar-menu {
+    position: fixed;
+    left: 80px;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #2a2a2a 0%, #1e1e1e 100%);
+    border-right: 1px solid #333;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: all 0.3s ease;
+    padding: 24px 20px;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.sidebar-menu.show {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-header h3 {
     font-size: 28px;
     font-weight: 600;
     color: #ffffff;
-}
-
-.beta {
-    background: #007bff;
-    color: white;
-    font-size: 12px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-left: 8px;
-    font-weight: 500;
+    margin-bottom: 8px;
 }
 
 .menu-label {
@@ -54,48 +346,43 @@ body {
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 1px;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     text-transform: uppercase;
 }
 
-.nav-menu {
+.menu-items {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
 }
 
-.nav-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    border-radius: 8px;
+.menu-item {
+    padding: 16px 20px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
     color: #ccc;
     font-weight: 500;
+    font-size: 16px;
 }
 
-.nav-item:hover {
+.menu-item:hover {
     background-color: #3a3a3a;
     color: #ffffff;
 }
 
-.nav-item.active {
+.menu-item.active {
     background: #007bff;
     color: #ffffff;
-}
-
-.nav-item .icon {
-    margin-right: 12px;
-    font-size: 16px;
 }
 
 /* Main Content */
 .main-content {
     flex: 1;
-    margin-left: 280px;
+    margin-left: 80px;
     background-color: #1a1a1a;
     min-height: 100vh;
+    transition: all 0.3s ease;
 }
 
 /* Header */
@@ -183,12 +470,29 @@ body {
     color: #007bff;
 }
 
+.user-profile {
+    width: 40px;
+    height: 40px;
+    background: #007bff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 16px;
+}
+
+.user-avatar {
+    color: #ffffff;
+    font-size: 18px;
+}
+
 /* Dashboard Content */
 .dashboard {
     padding: 32px;
 }
 
-.loading {
+.data-loading {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -205,11 +509,6 @@ body {
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
 
 /* Cards */
@@ -409,6 +708,24 @@ body {
     font-weight: 600;
 }
 
+/* Coming Soon */
+.coming-soon {
+    text-align: center;
+    padding: 100px 20px;
+    color: #888;
+}
+
+.coming-soon h2 {
+    font-size: 36px;
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+.coming-soon p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
 /* Empty State */
 .empty-state {
     text-align: center;
@@ -429,13 +746,35 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 240px;
-        transform: translateX(-100%);
+    .login-container {
+        flex-direction: column;
+    }
+    
+    .login-left {
+        height: 40vh;
+    }
+    
+    .login-right {
+        flex: 1;
+        padding: 20px;
+    }
+    
+    .logo-circle {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .shield-icon {
+        width: 80px;
+        height: 100px;
+    }
+    
+    .sidebar-collapsed {
+        width: 60px;
     }
     
     .main-content {
-        margin-left: 0;
+        margin-left: 60px;
     }
     
     .header {
@@ -447,12 +786,12 @@ body {
     
     .header-right {
         width: 100%;
-        flex-direction: column;
-        align-items: stretch;
+        flex-wrap: wrap;
     }
     
     .search-container {
-        width: 100%;
+        flex: 1;
+        min-width: 200px;
     }
     
     .dashboard {
@@ -463,17 +802,24 @@ body {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-    
-    .table-wrapper {
-        overflow-x: scroll;
-    }
-    
-    .data-table {
-        min-width: 600px;
-    }
 }
 
 @media (max-width: 480px) {
+    .sidebar-collapsed {
+        width: 50px;
+        padding: 16px 8px;
+    }
+    
+    .main-content {
+        margin-left: 50px;
+    }
+    
+    .nav-icon-item {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
     .card {
         padding: 16px;
     }
