@@ -5,15 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cautio Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Login Page -->
     <div class="login-page" id="loginPage">
+        <div class="login-background">
+            <div class="login-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
         <div class="login-container">
             <div class="login-left">
-                <div class="login-logo">
-                    <div class="logo-circle">
-                        <div class="shield-icon"></div>
+                <div class="login-content">
+                    <div class="login-logo">
+                        <div class="logo-circle">
+                            <div class="shield-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="login-text">
+                        <h1>Welcome to Cautio</h1>
+                        <p>Your comprehensive fleet management platform</p>
                     </div>
                 </div>
             </div>
@@ -22,28 +38,43 @@
                     <div class="login-header">
                         <div class="login-logo-small">
                             <div class="logo-small-circle">
-                                <div class="shield-small"></div>
+                                <i class="fas fa-shield-alt"></i>
                             </div>
                         </div>
-                        <h2>Sign in</h2>
+                        <h2>Sign in to your account</h2>
+                        <p>Enter your credentials to access the dashboard</p>
                     </div>
                     <form class="login-form" onsubmit="handleLogin(event)">
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" placeholder="example@gmail.com" required>
+                            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" id="email" placeholder="admin@gm.com" required>
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <label for="password"><i class="fas fa-lock"></i> Password</label>
                             <div class="password-input">
-                                <input type="password" id="password" placeholder="Password" required>
-                                <button type="button" class="password-toggle" onclick="togglePassword()">👁️</button>
+                                <input type="password" id="password" placeholder="Enter your password" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword()">
+                                    <i class="fas fa-eye"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="forgot-password">
-                            <a href="#">Forgot Password?</a>
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">Remember me</label>
+                            </div>
+                            <div class="forgot-password">
+                                <a href="#"><i class="fas fa-question-circle"></i> Forgot Password?</a>
+                            </div>
                         </div>
-                        <button type="submit" class="login-btn">Login</button>
+                        <button type="submit" class="login-btn">
+                            <span>Sign In</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </form>
+                    <div class="login-footer">
+                        <p>Demo Credentials: <strong>admin@gm.com</strong> / <strong>admin123</strong></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,136 +82,238 @@
 
     <!-- Loading Page -->
     <div class="loading-page" id="loadingPage" style="display: none;">
+        <div class="loading-background">
+            <div class="loading-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+        </div>
         <div class="loading-content">
             <div class="cautio-logo">
                 <h1>cautio</h1>
+                <div class="logo-underline"></div>
             </div>
-            <div class="loading-spinner-main"></div>
-            <p class="loading-text">Loading your dashboard...</p>
+            <div class="loading-animation">
+                <div class="loading-ring"></div>
+                <div class="loading-ring"></div>
+                <div class="loading-ring"></div>
+            </div>
+            <div class="loading-text">
+                <p class="loading-main">Initializing Dashboard...</p>
+                <p class="loading-sub" id="loadingSubText">Loading your data</p>
+            </div>
+            <div class="loading-progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
         </div>
     </div>
 
     <!-- Main Dashboard -->
     <div class="main-app" id="mainApp" style="display: none;">
-        <div class="container">
-            <!-- Collapsed Sidebar -->
-            <div class="sidebar-collapsed" id="sidebarCollapsed">
-                <div class="logo-collapsed">
-                    <h3>cautio</h3>
+        <div class="app-container">
+            <!-- Main Navigation Tabs -->
+            <div class="main-nav" id="mainNav">
+                <div class="nav-header">
+                    <div class="nav-logo">
+                        <h2>cautio</h2>
+                        <span class="nav-tagline">Fleet Management Platform</span>
+                    </div>
                 </div>
-                <div class="nav-icons">
-                    <div class="nav-icon-item" data-tab="customer" onmouseover="showSidebarMenu(event, 'customer')">
-                        <i class="icon">👥</i>
+                <div class="nav-tabs">
+                    <div class="nav-tab active" data-tab="customer" onclick="switchTab('customer')">
+                        <div class="tab-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="tab-content">
+                            <span class="tab-title">Customer Overview</span>
+                            <span class="tab-desc">Manage your customer base</span>
+                        </div>
+                        <div class="tab-indicator"></div>
                     </div>
-                    <div class="nav-icon-item" data-tab="finance" onmouseover="showSidebarMenu(event, 'finance')">
-                        <i class="icon">💰</i>
+                    <div class="nav-tab" data-tab="finance" onclick="switchTab('finance')">
+                        <div class="tab-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="tab-content">
+                            <span class="tab-title">Finance</span>
+                            <span class="tab-desc">Revenue & billing analytics</span>
+                        </div>
+                        <div class="tab-indicator"></div>
                     </div>
-                    <div class="nav-icon-item" data-tab="ground" onmouseover="showSidebarMenu(event, 'ground')">
-                        <i class="icon">🚛</i>
+                    <div class="nav-tab" data-tab="ground" onclick="switchTab('ground')">
+                        <div class="tab-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="tab-content">
+                            <span class="tab-title">Ground Operations</span>
+                            <span class="tab-desc">Fleet & operations management</span>
+                        </div>
+                        <div class="tab-indicator"></div>
                     </div>
-                    <div class="nav-icon-item" data-tab="inventory" onmouseover="showSidebarMenu(event, 'inventory')">
-                        <i class="icon">📦</i>
+                    <div class="nav-tab" data-tab="inventory" onclick="switchTab('inventory')">
+                        <div class="tab-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="tab-content">
+                            <span class="tab-title">Inventory Management</span>
+                            <span class="tab-desc">Warehouse & stock control</span>
+                        </div>
+                        <div class="tab-indicator"></div>
+                    </div>
+                </div>
+                <div class="nav-footer">
+                    <div class="user-profile" onclick="logout()">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">Admin User</span>
+                            <span class="user-role">System Administrator</span>
+                        </div>
+                        <div class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Expanded Sidebar Menu -->
-            <div class="sidebar-menu" id="sidebarMenu" onmouseleave="hideSidebarMenu()">
-                <div class="sidebar-menu-content">
-                    <div class="menu-header">
-                        <h3>cautio</h3>
-                        <div class="menu-label">MENU</div>
-                    </div>
-                    <div class="menu-items" id="menuItems">
-                        <!-- Dynamic menu items will be inserted here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Content -->
+            <!-- Main Content Area -->
             <div class="main-content">
                 <!-- Header -->
-                <div class="header">
+                <div class="content-header">
                     <div class="header-left">
-                        <h1 id="pageTitle">COMMAND CENTER</h1>
-                        <p id="pageSubtitle">Welcome to a world where vehicles speak - and you listen in.</p>
+                        <h1 id="pageTitle">CUSTOMER OVERVIEW</h1>
+                        <p id="pageSubtitle">Comprehensive view of your customer management</p>
                     </div>
                     <div class="header-right">
                         <div class="search-container">
-                            <input type="text" placeholder="Search for a vehicle" class="search-input">
-                            <button class="search-btn">🔍</button>
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search customers, data..." class="search-input">
                         </div>
-                        <select class="group-selector">
-                            <option>All Groups</option>
-                        </select>
-                        <button class="clear-btn">Clear</button>
-                        <div class="user-profile" onclick="logout()">
-                            <div class="user-avatar">👤</div>
+                        <div class="header-actions">
+                            <button class="action-btn" title="Refresh Data" onclick="loadData()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button class="action-btn" title="Export Data">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="action-btn" title="Settings">
+                                <i class="fas fa-cog"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Dashboard Content -->
-                <div class="dashboard" id="dashboard">
+                <div class="dashboard-wrapper">
                     <!-- Data Loading -->
                     <div class="data-loading" id="dataLoading">
-                        <div class="loading-spinner"></div>
-                        <p>Loading data from Google Sheets...</p>
+                        <div class="loading-card">
+                            <div class="loading-spinner"></div>
+                            <h3>Loading Customer Data</h3>
+                            <p>Fetching data from Google Sheets...</p>
+                        </div>
                     </div>
 
                     <!-- Customer Overview Section -->
-                    <div class="dashboard-content" id="customerOverview" style="display: none;">
+                    <div class="section-content" id="customerSection">
                         <!-- Main Dashboard -->
                         <div class="dashboard-view" id="mainDashboard">
-                            <div class="card main-card" onclick="showLevel2()">
-                                <div class="card-header">
-                                    <h3>Total Customers</h3>
-                                    <div class="card-count" id="totalCustomersCount">0</div>
-                                </div>
-                                <div class="card-body">
-                                    <p>Click to view customer breakdown</p>
+                            <div class="stats-overview">
+                                <div class="stat-card total-customers" onclick="showLevel2()">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <div class="stat-number" id="totalCustomersCount">0</div>
+                                        <div class="stat-label">Total Customers</div>
+                                        <div class="stat-desc">Click to view detailed breakdown</div>
+                                    </div>
+                                    <div class="stat-trend">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>+12.5%</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Level 2 Dashboard -->
                         <div class="dashboard-view" id="level2Dashboard" style="display: none;">
-                            <div class="nav-breadcrumb">
-                                <span onclick="showMainDashboard()" class="breadcrumb-link">Dashboard</span> 
-                                <span class="breadcrumb-separator">></span> 
-                                <span>Customer Overview</span>
+                            <div class="breadcrumb-nav">
+                                <span onclick="showMainDashboard()" class="breadcrumb-link">
+                                    <i class="fas fa-home"></i> Dashboard
+                                </span>
+                                <i class="fas fa-chevron-right breadcrumb-separator"></i>
+                                <span>Customer Breakdown</span>
                             </div>
                             
-                            <div class="cards-grid">
-                                <div class="card" onclick="showPOCTable()">
+                            <div class="customer-cards-grid">
+                                <div class="customer-card poc-card" onclick="showPOCTable()">
                                     <div class="card-header">
-                                        <h3>POC</h3>
-                                        <div class="card-count" id="pocCount">0</div>
+                                        <div class="card-icon">
+                                            <i class="fas fa-handshake"></i>
+                                        </div>
+                                        <div class="card-menu">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-                                        <p>Proof of Concept customers</p>
+                                        <div class="card-title">POC Customers</div>
+                                        <div class="card-number" id="pocCount">0</div>
+                                        <div class="card-desc">Proof of Concept customers</div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <span class="card-trend positive">
+                                            <i class="fas fa-arrow-up"></i> 8.2%
+                                        </span>
+                                        <span class="card-period">This month</span>
                                     </div>
                                 </div>
 
-                                <div class="card" onclick="showOnboardedTable()">
+                                <div class="customer-card onboarded-card" onclick="showOnboardedTable()">
                                     <div class="card-header">
-                                        <h3>Onboarded</h3>
-                                        <div class="card-count" id="onboardedCount">0</div>
+                                        <div class="card-icon">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                        <div class="card-menu">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-                                        <p>Successfully onboarded customers</p>
+                                        <div class="card-title">Onboarded</div>
+                                        <div class="card-number" id="onboardedCount">0</div>
+                                        <div class="card-desc">Successfully onboarded customers</div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <span class="card-trend positive">
+                                            <i class="fas fa-arrow-up"></i> 15.7%
+                                        </span>
+                                        <span class="card-period">This month</span>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="closed-section" id="closedSection" style="display: none;">
-                                <div class="card closed-card" onclick="showClosedPOCTable()">
+                                <div class="customer-card closed-card" id="closedCardWrapper" style="display: none;" onclick="showClosedPOCTable()">
                                     <div class="card-header">
-                                        <h3>Closed POCs</h3>
-                                        <div class="card-count" id="closedPOCCount">0</div>
+                                        <div class="card-icon">
+                                            <i class="fas fa-times-circle"></i>
+                                        </div>
+                                        <div class="card-menu">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </div>
                                     </div>
                                     <div class="card-body">
-                                        <p>POCs that have ended</p>
+                                        <div class="card-title">Closed POCs</div>
+                                        <div class="card-number" id="closedPOCCount">0</div>
+                                        <div class="card-desc">POCs that have ended</div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <span class="card-trend negative">
+                                            <i class="fas fa-arrow-down"></i> 3.1%
+                                        </span>
+                                        <span class="card-period">This month</span>
                                     </div>
                                 </div>
                             </div>
@@ -188,22 +321,37 @@
 
                         <!-- Table View -->
                         <div class="dashboard-view" id="tableView" style="display: none;">
-                            <div class="nav-breadcrumb" id="tableBreadcrumb">
-                                <!-- Dynamic breadcrumb will be inserted here -->
+                            <div class="breadcrumb-nav" id="tableBreadcrumb">
+                                <!-- Dynamic breadcrumb -->
                             </div>
                             
-                            <div class="table-container">
+                            <div class="table-section">
                                 <div class="table-header">
-                                    <h3 id="tableTitle">Customer Data</h3>
-                                    <div class="table-count">Total: <span id="tableCount">0</span></div>
+                                    <div class="table-title-section">
+                                        <h2 id="tableTitle">Customer Data</h2>
+                                        <div class="table-count-badge">
+                                            Total: <span id="tableCount">0</span> records
+                                        </div>
+                                    </div>
+                                    <div class="table-actions">
+                                        <button class="table-btn" title="Filter">
+                                            <i class="fas fa-filter"></i>
+                                        </button>
+                                        <button class="table-btn" title="Export">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button class="table-btn" title="Print">
+                                            <i class="fas fa-print"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="table-wrapper">
+                                <div class="table-container">
                                     <table class="data-table" id="dataTable">
                                         <thead id="tableHead">
-                                            <!-- Dynamic headers will be inserted here -->
+                                            <!-- Dynamic headers -->
                                         </thead>
                                         <tbody id="tableBody">
-                                            <!-- Dynamic data will be inserted here -->
+                                            <!-- Dynamic data -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -212,26 +360,77 @@
                     </div>
 
                     <!-- Finance Section -->
-                    <div class="dashboard-content" id="financeSection" style="display: none;">
-                        <div class="coming-soon">
-                            <h2>Finance</h2>
-                            <p>Financial data and analytics coming soon...</p>
+                    <div class="section-content" id="financeSection" style="display: none;">
+                        <div class="coming-soon-section">
+                            <div class="coming-soon-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h2>Finance Module</h2>
+                            <p>Revenue analytics, billing management, and financial reporting tools are coming soon...</p>
+                            <div class="features-preview">
+                                <div class="feature-item">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>Revenue Tracking</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-receipt"></i>
+                                    <span>Billing Management</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Financial Reports</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Ground Operations Section -->
-                    <div class="dashboard-content" id="groundSection" style="display: none;">
-                        <div class="coming-soon">
-                            <h2>Ground Operations</h2>
-                            <p>Ground operations dashboard coming soon...</p>
+                    <div class="section-content" id="groundSection" style="display: none;">
+                        <div class="coming-soon-section">
+                            <div class="coming-soon-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <h2>Ground Operations Module</h2>
+                            <p>Fleet management, driver tracking, and operations control dashboard coming soon...</p>
+                            <div class="features-preview">
+                                <div class="feature-item">
+                                    <i class="fas fa-route"></i>
+                                    <span>Route Optimization</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-user-tie"></i>
+                                    <span>Driver Management</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <span>Real-time Monitoring</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Inventory Management Section -->
-                    <div class="dashboard-content" id="inventorySection" style="display: none;">
-                        <div class="coming-soon">
-                            <h2>Inventory Management</h2>
-                            <p>Inventory management system coming soon...</p>
+                    <!-- Inventory Section -->
+                    <div class="section-content" id="inventorySection" style="display: none;">
+                        <div class="coming-soon-section">
+                            <div class="coming-soon-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <h2>Inventory Management Module</h2>
+                            <p>Warehouse management, stock control, and supply chain optimization tools coming soon...</p>
+                            <div class="features-preview">
+                                <div class="feature-item">
+                                    <i class="fas fa-warehouse"></i>
+                                    <span>Warehouse Control</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <span>Stock Management</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-shipping-fast"></i>
+                                    <span>Supply Chain</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
