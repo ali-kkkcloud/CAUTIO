@@ -1425,6 +1425,10 @@ body {
         padding: 40px 20px;
     }
     
+    .login-form-wrapper {
+        min-height: auto;
+    }
+    
     .login-text h1 {
         font-size: 2.5rem;
     }
@@ -1448,10 +1452,11 @@ body {
     .header-right {
         width: 100%;
         justify-content: space-between;
+        max-width: 100%;
     }
     
     .search-container {
-        width: 200px;
+        width: 250px;
     }
     
     .customer-cards-grid {
